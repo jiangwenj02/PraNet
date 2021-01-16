@@ -18,7 +18,6 @@ class PolypDataset(data.Dataset):
             name = annotations["images"][i]["file_name"]
             self.images.append(image_root + name)
             self.gts.append(gt_root + name)
-        print(self.images)
         self.images = sorted(self.images)
         self.gts = sorted(self.gts)
         self.filter_files()
@@ -46,6 +45,7 @@ class PolypDataset(data.Dataset):
         for img_path, gt_path in zip(self.images, self.gts):
             img = Image.open(img_path)
             gt = Image.open(gt_path)
+            print(img.size, gt.size)
             if img.size == gt.size:
                 images.append(img_path)
                 gts.append(gt_path)
