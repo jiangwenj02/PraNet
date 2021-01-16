@@ -92,7 +92,7 @@ if __name__ == '__main__':
     parser.add_argument('--train_save', type=str,
                         default='PraNet_Res2Net')
     parser.add_argument('--json_file', type=str,
-                        default='/data0/zzhang/new_polyp_annotation_01_03/train.json)
+                        default='/data0/zzhang/new_polyp_annotation_01_03/train.json')
     opt = parser.parse_args()
 
     # ---- build models ----
