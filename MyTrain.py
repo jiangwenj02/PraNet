@@ -87,8 +87,12 @@ if __name__ == '__main__':
                         default=50, help='every n epochs decay learning rate')
     parser.add_argument('--train_path', type=str,
                         default='./data/TrainDataset', help='path to train dataset')
+    parser.add_argument('--gt_path', type=str,
+                        default='./data/TrainDataset', help='path to train dataset')
     parser.add_argument('--train_save', type=str,
                         default='PraNet_Res2Net')
+    parser.add_argument('--json_file', type=str,
+                        default='/data0/zzhang/new_polyp_annotation_01_03/train.json)
     opt = parser.parse_args()
 
     # ---- build models ----
@@ -103,10 +107,10 @@ if __name__ == '__main__':
     params = model.parameters()
     optimizer = torch.optim.Adam(params, opt.lr)
 
-    image_root = '{}/images/'.format(opt.train_path)
-    gt_root = '{}/masks/'.format(opt.train_path)
+    image_root = opt.train_path
+    gt_root = opt.gt_path
 
-    train_loader = get_loader(image_root, gt_root, batchsize=opt.batchsize, trainsize=opt.trainsize)
+    train_loader = get_loader(image_root, gt_root, opt.json_file, batchsize=opt.batchsize, trainsize=opt.trainsize)
     total_step = len(train_loader)
 
     print("#"*20, "Start Training", "#"*20)

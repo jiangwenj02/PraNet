@@ -2,16 +2,23 @@ import os
 from PIL import Image
 import torch.utils.data as data
 import torchvision.transforms as transforms
-
+import glob
+import json
 
 class PolypDataset(data.Dataset):
     """
     dataloader for polyp segmentation tasks
     """
-    def __init__(self, image_root, gt_root, trainsize):
+    def __init__(self, image_root, gt_root, json_file, trainsize):
         self.trainsize = trainsize
-        self.gts = [gt_root + f for f in os.listdir(gt_root) if f.endswith('.png')]
-        self.images = [f.replace(gt_root, image_root) for f in self.gts]
+        annotations = json.load(open(json_file))
+        self.images = []
+        self.gts = []
+        for i in range(len(annotations["images"])):
+            name = annotations["images"][i]["file_name"]
+            self.images.append(image_root + name)
+            self.gts.append(gt_root + name)
+
         self.images = sorted(self.images)
         self.gts = sorted(self.gts)
         self.filter_files()
@@ -70,9 +77,9 @@ class PolypDataset(data.Dataset):
         return self.size
 
 
-def get_loader(image_root, gt_root, batchsize, trainsize, shuffle=True, num_workers=4, pin_memory=True):
+def get_loader(image_root, gt_root, json_file, batchsize, trainsize, shuffle=True, num_workers=4, pin_memory=True):
 
-    dataset = PolypDataset(image_root, gt_root, trainsize)
+    dataset = PolypDataset(image_root, gt_root, json_file, trainsize)
     data_loader = data.DataLoader(dataset=dataset,
                                   batch_size=batchsize,
                                   shuffle=shuffle,
