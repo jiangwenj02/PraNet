@@ -85,10 +85,10 @@ if __name__ == '__main__':
                         default=0.1, help='decay rate of learning rate')
     parser.add_argument('--decay_epoch', type=int,
                         default=50, help='every n epochs decay learning rate')
-    parser.add_argument('--train_path', type=str,
-                        default='./data/TrainDataset', help='path to train dataset')
+    parser.add_argument('--/data2/dataset/cleaned_data/', type=str,
+                        default='', help='path to train dataset')
     parser.add_argument('--gt_path', type=str,
-                        default='./data/TrainDataset', help='path to train dataset')
+                        default='./train_anno/', help='path to train dataset')
     parser.add_argument('--train_save', type=str,
                         default='PraNet_Res2Net')
     parser.add_argument('--json_file', type=str,

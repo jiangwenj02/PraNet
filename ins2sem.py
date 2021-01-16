@@ -75,9 +75,9 @@ def cooc_to_segmentation(json_file, export_dir):
         PIL.Image.fromarray(mask).save(file_path)
  
 def main():
-    #cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/train.json', './train_anno')      
-    #cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/test.json', './test_anno') 
-    cooc_to_segmentation('E:/Users/jiangwenj02/Downloads/new_polyp_annotation_01_03/test.json', './test_anno') 
+    cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/train.json', './train_anno')      
+    cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/test.json', './test_anno') 
+    #cooc_to_segmentation('E:/Users/jiangwenj02/Downloads/new_polyp_annotation_01_03/test.json', './test_anno') 
  
 if __name__ == "__main__":
     main()
