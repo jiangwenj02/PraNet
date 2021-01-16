@@ -1,4 +1,5 @@
 import os
+import os.path as osp
 import numpy as np
 import json
 import PIL.Image
@@ -29,7 +30,12 @@ def shape_to_mask(img_shape, points, category_id):
  
     return img_mask
  
- 
+def mkdir_or_exist(dir_name, mode=0o777):
+    if dir_name == '':
+        return
+    dir_name = osp.expanduser(dir_name)
+    os.makedirs(dir_name, mode=mode, exist_ok=True)
+
 def cooc_to_segmentation(json_file, export_dir):
     """Generate the annotation information according to the json_file
     Args:
@@ -57,8 +63,12 @@ def cooc_to_segmentation(json_file, export_dir):
             #     break
         
         mask = shape_to_mask((w, h), points, category_id)
- 
-        PIL.Image.fromarray(mask).save(os.path.join(export_dir, name))
+
+        file_path = os.path.join(export_dir, name)
+        dir_name = osp.abspath(osp.dirname(file_path))
+        mkdir_or_exist(dir_name)
+        
+        PIL.Image.fromarray(mask).save(file_path)
  
 def main():
     cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/train.json', './train_anno')      
