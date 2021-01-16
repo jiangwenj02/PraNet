@@ -26,7 +26,7 @@ def shape_to_mask(img_shape, points, category_id):
         assert len(xy) > 2, "Polygon must have points more than 2"
         draw.polygon(xy=xy, outline=1, fill=1)
         # 对每个类别生成的mask进行叠加，此处要求mask不能重合，否则会出现标签溢出的现象，即叠加后产生标签值增大的现象
-        img_mask = img_mask + np.array(shape_mask, dtype=np.uint8) * category_id[i] + 128
+        img_mask = img_mask + np.array(shape_mask, dtype=np.uint8) * category_id[i]
  
     return img_mask
  
@@ -56,10 +56,12 @@ def cooc_to_segmentation(json_file, export_dir):
         # 取出每个shape的 id 和 点
         points, category_id = [], []
         for shape in annotations["annotations"]:
-            print(i, shape["image_id"])
-            if shape["image_id"] == str(i):
-                points.append(shape["segmentation"])
-                print(points)
+            import pdb
+            #pdb.set_trace()
+            #print(i, shape["image_id"], shape["image_id"] == str(i))
+            if shape["image_id"] == i:
+                points.extend(shape["segmentation"])
+                #print(points)
                 category_id.append(shape["category_id"])
             # if int(shape["image_id"]) > i:  # 早停 减少搜索数, 不确定是否按顺序排序，如果标签按照顺序排序，早停会减少处理时间
             #     break
@@ -73,8 +75,9 @@ def cooc_to_segmentation(json_file, export_dir):
         PIL.Image.fromarray(mask).save(file_path)
  
 def main():
-    cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/train.json', './train_anno')      
-    cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/test.json', './test_anno') 
+    #cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/train.json', './train_anno')      
+    #cooc_to_segmentation('/data0/zzhang/new_polyp_annotation_01_03/test.json', './test_anno') 
+    cooc_to_segmentation('E:/Users/jiangwenj02/Downloads/new_polyp_annotation_01_03/test.json', './test_anno') 
  
 if __name__ == "__main__":
     main()

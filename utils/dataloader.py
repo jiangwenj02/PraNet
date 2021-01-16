@@ -10,8 +10,8 @@ class PolypDataset(data.Dataset):
     """
     def __init__(self, image_root, gt_root, trainsize):
         self.trainsize = trainsize
-        self.images = [image_root + f for f in os.listdir(image_root) if f.endswith('.jpg') or f.endswith('.png')]
         self.gts = [gt_root + f for f in os.listdir(gt_root) if f.endswith('.png')]
+        self.images = [f.replace(gt_root, image_root) for f in self.gts]
         self.images = sorted(self.images)
         self.gts = sorted(self.gts)
         self.filter_files()
