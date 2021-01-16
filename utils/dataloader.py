@@ -45,7 +45,7 @@ class PolypDataset(data.Dataset):
         for img_path, gt_path in zip(self.images, self.gts):
             img = Image.open(img_path)
             gt = Image.open(gt_path)
-            print(img.size, gt.size)
+            #print(img.size, gt.size)
             if img.size == gt.size:
                 images.append(img_path)
                 gts.append(gt_path)
