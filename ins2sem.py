@@ -56,6 +56,7 @@ def cooc_to_segmentation(json_file, export_dir):
         # 取出每个shape的 id 和 点
         points, category_id = [], []
         for shape in annotations["annotations"]:
+            print(i, shape["image_id"])
             if shape["image_id"] == str(i):
                 points.append(shape["segmentation"])
                 print(points)
