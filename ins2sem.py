@@ -66,7 +66,7 @@ def cooc_to_segmentation(json_file, export_dir):
             # if int(shape["image_id"]) > i:  # 早停 减少搜索数, 不确定是否按顺序排序，如果标签按照顺序排序，早停会减少处理时间
             #     break
         
-        mask = shape_to_mask((w, h), points, category_id)
+        mask = shape_to_mask((h, w), points, category_id)
 
         file_path = os.path.join(export_dir, name)
         dir_name = osp.abspath(osp.dirname(file_path))
