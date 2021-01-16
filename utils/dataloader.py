@@ -18,7 +18,7 @@ class PolypDataset(data.Dataset):
             name = annotations["images"][i]["file_name"]
             self.images.append(image_root + name)
             self.gts.append(gt_root + name)
-
+        print(self.images)
         self.images = sorted(self.images)
         self.gts = sorted(self.gts)
         self.filter_files()
