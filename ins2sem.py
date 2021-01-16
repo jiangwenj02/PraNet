@@ -58,6 +58,7 @@ def cooc_to_segmentation(json_file, export_dir):
         for shape in annotations["annotations"]:
             if shape["image_id"] == str(i):
                 points.append(shape["segmentation"])
+                print(points)
                 category_id.append(shape["category_id"])
             # if int(shape["image_id"]) > i:  # 早停 减少搜索数, 不确定是否按顺序排序，如果标签按照顺序排序，早停会减少处理时间
             #     break
