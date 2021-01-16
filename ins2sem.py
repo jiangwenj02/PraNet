@@ -26,7 +26,7 @@ def shape_to_mask(img_shape, points, category_id):
         assert len(xy) > 2, "Polygon must have points more than 2"
         draw.polygon(xy=xy, outline=1, fill=1)
         # 对每个类别生成的mask进行叠加，此处要求mask不能重合，否则会出现标签溢出的现象，即叠加后产生标签值增大的现象
-        img_mask = img_mask + np.array(shape_mask, dtype=np.uint8) * category_id[i]
+        img_mask = img_mask + np.array(shape_mask, dtype=np.uint8) * category_id[i] + 128
  
     return img_mask
  
