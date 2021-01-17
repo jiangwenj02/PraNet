@@ -9,10 +9,12 @@ from utils.dataloader import test_dataset
 parser = argparse.ArgumentParser()
 parser.add_argument('--testsize', type=int, default=352, help='testing size')
 parser.add_argument('--pth_path', type=str, default='./snapshots/PraNet_Res2Net/PraNet-19.pth')
+parser.add_argument('--json_file', type=str,
+                        default='/data0/zzhang/new_polyp_annotation_01_03/test.json')
 
-for _data_name in ['CVC-300', 'CVC-ClinicDB', 'Kvasir', 'CVC-ColonDB', 'ETIS-LaribPolypDB']:
-    data_path = './data/TestDataset/{}/'.format(_data_name)
-    save_path = './results/PraNet/{}/'.format(_data_name)
+for _data_name in ['CVC-300']:
+    data_path = '/data2/dataset/cleaned_data/'
+    save_path = '/data0/zzhang/tmp/pranet/'
     opt = parser.parse_args()
     model = PraNet()
     model.load_state_dict(torch.load(opt.pth_path))
@@ -20,9 +22,9 @@ for _data_name in ['CVC-300', 'CVC-ClinicDB', 'Kvasir', 'CVC-ColonDB', 'ETIS-Lar
     model.eval()
 
     os.makedirs(save_path, exist_ok=True)
-    image_root = '{}/images/'.format(data_path)
-    gt_root = '{}/masks/'.format(data_path)
-    test_loader = test_dataset(image_root, gt_root, opt.testsize)
+    image_root = data_path
+    gt_root = save_path
+    test_loader = test_dataset(image_root, gt_root, opt.json_file, opt.testsize)
 
     for i in range(test_loader.size):
         image, gt, name = test_loader.load_data()

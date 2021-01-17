@@ -89,12 +89,17 @@ def get_loader(image_root, gt_root, json_file, batchsize, trainsize, shuffle=Tru
 
 
 class test_dataset:
-    def __init__(self, image_root, gt_root, testsize):
+    def __init__(self, image_root, gt_root, json_file, testsize):
         self.testsize = testsize
         self.images = [image_root + f for f in os.listdir(image_root) if f.endswith('.jpg') or f.endswith('.png')]
         self.gts = [gt_root + f for f in os.listdir(gt_root) if f.endswith('.tif') or f.endswith('.png')]
-        self.images = sorted(self.images)
-        self.gts = sorted(self.gts)
+        annotations = json.load(open(json_file))
+        self.images = []
+        self.gts = []
+        for i in range(len(annotations["images"])):
+            name = annotations["images"][i]["file_name"]
+            self.images.append(image_root + name)
+            self.gts.append(gt_root + name)
         self.transform = transforms.Compose([
             transforms.Resize((self.testsize, self.testsize)),
             transforms.ToTensor(),
