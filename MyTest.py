@@ -41,11 +41,10 @@ for _data_name in ['CVC-300']:
 
         res5, res4, res3, res2 = model(image)
         res = res2
-        import pdb
-        pdb.set_trace()
+
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
-        res = res.sigmoid().data.cpu().numpy().squeeze()
-        res = (res - res.min()) / (res.max() - res.min() + 1e-8)
+        res = res.sigmoid().data.cpu().numpy().squeeze() >= 0.5
+        # res = (res - res.min()) / (res.max() - res.min() + 1e-8)
         file_path = save_path+name
         dir_name = osp.abspath(osp.dirname(file_path))
         mkdir_or_exist(dir_name)
