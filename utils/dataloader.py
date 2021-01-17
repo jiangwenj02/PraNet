@@ -114,7 +114,7 @@ class test_dataset:
         image = self.rgb_loader(self.images[self.index])
         image = self.transform(image).unsqueeze(0)
         gt = self.binary_loader(self.gts[self.index])
-        name = self.namess[self.index]
+        name = self.names[self.index]
         self.index += 1
         return image, gt, 
 
