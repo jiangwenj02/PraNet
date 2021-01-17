@@ -116,7 +116,7 @@ class test_dataset:
         gt = self.binary_loader(self.gts[self.index])
         name = self.names[self.index]
         self.index += 1
-        return image, gt, 
+        return image, gt, name
 
     def rgb_loader(self, path):
         with open(path, 'rb') as f:
