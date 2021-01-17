@@ -73,6 +73,6 @@ images = []
 gts = []
 for i in range(len(annotations["images"])):
     name = annotations["images"][i]["file_name"]
-    images.append(pred_root + name.replace('.jpg', 'png'))
+    images.append(pred_root + name.replace('.jpg', '.png'))
     gts.append(gt_root + name)
 cal_acc(gts, images, 3)
