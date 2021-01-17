@@ -6,6 +6,7 @@ from scipy import misc
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
 import os.path as osp
+import tqdm
 
 def mkdir_or_exist(dir_name, mode=0o777):
     if dir_name == '':
@@ -33,7 +34,7 @@ for _data_name in ['CVC-300']:
     gt_root = './test_anno/'
     test_loader = test_dataset(image_root, gt_root, opt.json_file, opt.testsize)
 
-    for i in range(test_loader.size):
+    for i in tqdm(range(test_loader.size)):
         image, gt, name = test_loader.load_data()
         gt = np.asarray(gt, np.float32)
         gt /= (gt.max() + 1e-8)
