@@ -23,7 +23,7 @@ for _data_name in ['CVC-300']:
 
     os.makedirs(save_path, exist_ok=True)
     image_root = data_path
-    gt_root = save_path
+    gt_root = './train_anno/'
     test_loader = test_dataset(image_root, gt_root, opt.json_file, opt.testsize)
 
     for i in range(test_loader.size):
