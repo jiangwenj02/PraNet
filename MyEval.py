@@ -40,17 +40,6 @@ def intersectionAndUnion(output, target, K, ignore_index=255):
     area_union = area_output + area_target - area_intersection
     return area_intersection, area_union, area_target
 
-annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json'))
-gt_root = './test_anno/'
-pred_root = '/data0/zzhang/tmp/pranet/'
-images = []
-gts = []
-for i in range(len(annotations["images"])):
-    name = annotations["images"][i]["file_name"]
-    images.append(pred_root + name.replace('.jpg', 'png'))
-    gts.append(gt_root + name)
-cal_acc(gts, images, 3)
-
 def cal_acc(gt_images, pred_folder_images, classes):
     intersection_meter = AverageMeter()
     union_meter = AverageMeter()
@@ -75,3 +64,14 @@ def cal_acc(gt_images, pred_folder_images, classes):
     print('Eval result: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}.'.format(mIoU, mAcc, allAcc))
     for i in range(classes):
         print('Class_{} result: iou/accuracy {:.4f}/{:.4f}.'.format(i, iou_class[i], accuracy_class[i]))
+
+annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json'))
+gt_root = './test_anno/'
+pred_root = '/data0/zzhang/tmp/pranet/'
+images = []
+gts = []
+for i in range(len(annotations["images"])):
+    name = annotations["images"][i]["file_name"]
+    images.append(pred_root + name.replace('.jpg', 'png'))
+    gts.append(gt_root + name)
+cal_acc(gts, images, 3)
