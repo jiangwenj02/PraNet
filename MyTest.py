@@ -6,7 +6,7 @@ from scipy import misc
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
 import os.path as osp
-import tqdm
+from tqdm import tqdm
 
 def mkdir_or_exist(dir_name, mode=0o777):
     if dir_name == '':
