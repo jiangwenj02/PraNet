@@ -91,8 +91,6 @@ def get_loader(image_root, gt_root, json_file, batchsize, trainsize, shuffle=Tru
 class test_dataset:
     def __init__(self, image_root, gt_root, json_file, testsize):
         self.testsize = testsize
-        self.images = [image_root + f for f in os.listdir(image_root) if f.endswith('.jpg') or f.endswith('.png')]
-        self.gts = [gt_root + f for f in os.listdir(gt_root) if f.endswith('.tif') or f.endswith('.png')]
         annotations = json.load(open(json_file))
         self.images = []
         self.gts = []
@@ -114,8 +112,6 @@ class test_dataset:
         image = self.transform(image).unsqueeze(0)
         gt = self.binary_loader(self.gts[self.index])
         name = self.images[self.index].split('/')[-1]
-        if name.endswith('.jpg'):
-            name = name.split('.jpg')[0] + '.png'
         self.index += 1
         return image, gt, name
 

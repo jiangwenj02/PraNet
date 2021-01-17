@@ -5,6 +5,13 @@ import os, argparse
 from scipy import misc
 from lib.PraNet_Res2Net import PraNet
 from utils.dataloader import test_dataset
+import os.path as osp
+
+def mkdir_or_exist(dir_name, mode=0o777):
+    if dir_name == '':
+        return
+    dir_name = osp.expanduser(dir_name)
+    os.makedirs(dir_name, mode=mode, exist_ok=True)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--testsize', type=int, default=352, help='testing size')
@@ -37,4 +44,7 @@ for _data_name in ['CVC-300']:
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze()
         res = (res - res.min()) / (res.max() - res.min() + 1e-8)
-        misc.imsave(save_path+name, res)
+        file_path = save_path+name
+        dir_name = osp.abspath(osp.dirname(file_path))
+        mkdir_or_exist(dir_name)
+        misc.imsave(file_path, res)
