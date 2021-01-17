@@ -94,10 +94,13 @@ class test_dataset:
         annotations = json.load(open(json_file))
         self.images = []
         self.gts = []
+        self.names = []
         for i in range(len(annotations["images"])):
             name = annotations["images"][i]["file_name"]
             self.images.append(image_root + name)
             self.gts.append(gt_root + name)
+            self.names.append(name)
+
         self.transform = transforms.Compose([
             transforms.Resize((self.testsize, self.testsize)),
             transforms.ToTensor(),
@@ -111,9 +114,9 @@ class test_dataset:
         image = self.rgb_loader(self.images[self.index])
         image = self.transform(image).unsqueeze(0)
         gt = self.binary_loader(self.gts[self.index])
-        name = self.images[self.index].split('/')[-1]
+        name = self.namess[self.index]
         self.index += 1
-        return image, gt, name
+        return image, gt, 
 
     def rgb_loader(self, path):
         with open(path, 'rb') as f:
