@@ -83,7 +83,8 @@ def cal_acc(gt_images, pred_folder_images, classes):
 
 annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json'))
 gt_root = './test_anno/'
-pred_root = '/data0/zzhang/tmp/pranet/'
+#pred_root = '/data0/zzhang/tmp/pranet/'
+pred_root = '/data0/zzhang/tmp/cleaned_data/'
 images = []
 gts = []
 for i in range(len(annotations["images"])):
