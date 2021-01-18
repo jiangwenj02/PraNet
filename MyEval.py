@@ -52,6 +52,7 @@ def cal_acc(gt_images, pred_folder_images, classes):
     for i, _ in enumerate(gt_images):
         pred = cv2.imread(pred_folder_images[i], cv2.IMREAD_GRAYSCALE)
         target = cv2.imread(gt_images[i], cv2.IMREAD_GRAYSCALE)
+        print(pred_folder_images[i], gt_images[i])
         print(pred.shape, target.shape)
         intersection, union, target = intersectionAndUnion(pred, target, classes)
 
