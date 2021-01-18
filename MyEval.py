@@ -9,6 +9,7 @@ import os.path as osp
 import json
 import cv2
 from sklearn import metrics
+from pycocotools.coco import COCO
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -88,10 +89,18 @@ annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json
 gt_root = './test_anno/'
 #pred_root = '/data0/zzhang/tmp/pranet/'
 pred_root = '/data0/zzhang/tmp/cleaned_data/'
+coco = COCO('/data0/zzhang/new_polyp_annotation_01_03/test.json')
+img_ids = coco.getImgIds()
+img_infos = []
+for i in img_ids:
+    info = coco.loadImgs([i])[0]
+    info['filename'] = info['file_name']
+    img_infos.append(info)
+
 images = []
 gts = []
-for i in range(len(annotations["images"])):
-    name = annotations["images"][i]["file_name"]
+for i in range(len(img_infos)):
+    name = img_infos[i]['filename']
     images.append(pred_root + name)
     gts.append(gt_root + name)
 cal_acc(gts, images, 2)
