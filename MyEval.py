@@ -8,6 +8,7 @@ from utils.dataloader import test_dataset
 import os.path as osp
 import json
 import cv2
+from scipy import metrics
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -45,9 +46,18 @@ def cal_acc(gt_images, pred_folder_images, classes):
     union_meter = AverageMeter()
     target_meter = AverageMeter()
 
+    preds = np.zeros((0))
+    targets = np.zeros((0))
+
     for i, _ in enumerate(gt_images):
         pred = cv2.imread(pred_folder_images[i], cv2.IMREAD_GRAYSCALE)
         target = cv2.imread(gt_images[i], cv2.IMREAD_GRAYSCALE)
+        pred = pred.reshape((-1))
+        target = target.reshape((-1))
+
+        preds = np.concatenate((preds, pred), axis=0)
+        targets = np.concatenate((targets, target), axis=0)
+
         intersection, union, target = intersectionAndUnion(pred, target, classes)
         intersection_meter.update(intersection)
         union_meter.update(union)
@@ -55,6 +65,11 @@ def cal_acc(gt_images, pred_folder_images, classes):
         accuracy = sum(intersection_meter.val) / (sum(target_meter.val) + 1e-10)
         print('Evaluating {0}/{1} on image {2}, accuracy {3:.4f}.'.format(i + 1, len(gt_images), gt_images[i], accuracy))
 
+    precision = metrics.precision_score(targets, preds, average='macro')
+    recall = metrics.recall_score(targets, preds, average='macro')
+    f1 = metrics.f1_score(targets, preds, average='macro')
+    f2 = (1 + 4) * precision * recall / (4 * precision + recall)
+    
     iou_class = intersection_meter.sum / (union_meter.sum + 1e-10)
     accuracy_class = intersection_meter.sum / (target_meter.sum + 1e-10)
     mIoU = np.mean(iou_class)
@@ -64,6 +79,7 @@ def cal_acc(gt_images, pred_folder_images, classes):
     print('Eval result: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}.'.format(mIoU, mAcc, allAcc))
     for i in range(classes):
         print('Class_{} result: iou/accuracy {:.4f}/{:.4f}.'.format(i, iou_class[i], accuracy_class[i]))
+    print('Eval result: precision/recall/f1/f2 {:.4f}/{:.4f}/{:.4f}/{:.4f}.'.format(precision, recall, f1, f2))
 
 annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json'))
 gt_root = './test_anno/'
