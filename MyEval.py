@@ -8,7 +8,7 @@ from utils.dataloader import test_dataset
 import os.path as osp
 import json
 import cv2
-from scipy import metrics
+from sklearn import metrics
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
