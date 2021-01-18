@@ -54,14 +54,10 @@ def cal_acc(gt_images, pred_folder_images, classes):
         pred = cv2.imread(pred_folder_images[i], cv2.IMREAD_GRAYSCALE)
         target = cv2.imread(gt_images[i], cv2.IMREAD_GRAYSCALE)
 
+        preds = np.concatenate((preds, pred.reshape((-1))), axis=0)
+        targets = np.concatenate((targets, target.reshape((-1))), axis=0)
+
         intersection, union, target = intersectionAndUnion(pred, target, classes)
-
-        pred = pred.reshape((-1))
-        target = target.reshape((-1))
-
-        preds = np.concatenate((preds, pred), axis=0)
-        targets = np.concatenate((targets, target), axis=0)
-        print(preds.shape, targets.shape)
 
         intersection_meter.update(intersection)
         union_meter.update(union)
