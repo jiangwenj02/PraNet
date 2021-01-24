@@ -92,8 +92,8 @@ def cal_acc(gt_images, pred_folder_images, classes):
 
 
 gt_root = './test_anno/'
-#pred_root = '/data0/zzhang/tmp/pranet/'
-pred_root = '/data0/zzhang/tmp/cleaned_data/'
+pred_root = '/data0/zzhang/tmp/pranet/'
+#pred_root = '/data0/zzhang/tmp/cleaned_data/'
 coco = COCO('/data0/zzhang/new_polyp_annotation_01_03/test.json')
 img_ids = coco.getImgIds()
 img_infos = []
