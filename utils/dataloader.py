@@ -21,7 +21,7 @@ class PolypDataset(data.Dataset):
             info = coco.loadImgs([i])[0]
             self.images.append(image_root + info['file_name'])
             self.gts.append(gt_root + info['file_name'])
-
+        print(('all train images number %d') % len(self.images))
         self.filter_files()
         self.size = len(self.images)
         self.img_transform = transforms.Compose([
