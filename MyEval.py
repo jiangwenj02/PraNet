@@ -46,42 +46,51 @@ def cal_acc(gt_images, pred_folder_images, classes):
     intersection_meter = AverageMeter()
     union_meter = AverageMeter()
     target_meter = AverageMeter()
-
-    preds = np.zeros((0))
-    targets = np.zeros((0))
+    precision_meter = AverageMeter()
+    recall_meter = AverageMeter()
+    f1_meter = AverageMeter()
+    f2_meter = AverageMeter()    
 
     for i, _ in enumerate(gt_images):
         pred = cv2.imread(pred_folder_images[i], cv2.IMREAD_GRAYSCALE)
         target = cv2.imread(gt_images[i], cv2.IMREAD_GRAYSCALE)
 
-        preds = np.concatenate((preds, pred.reshape((-1))), axis=0)
-        targets = np.concatenate((targets, target.reshape((-1))), axis=0)
+        precision = metrics.precision_score(target.reshape((-1)), pred.reshape((-1)), average='macro')
+        recall = metrics.recall_score(target.reshape((-1)), pred.reshape((-1)), average='macro')
+        f1 = metrics.f1_score(target.reshape((-1)), pred.reshape((-1)), average='macro')
+        f2 = (1 + 4) * precision * recall / (4 * precision + recall)
 
         intersection, union, target = intersectionAndUnion(pred, target, classes)
 
         intersection_meter.update(intersection)
         union_meter.update(union)
         target_meter.update(target)
+        precision_meter.update(precision)
+        recall_meter.update(recall)
+        f1_meter.update(f1)
+        f2_meter.update(f2)
         accuracy = sum(intersection_meter.val) / (sum(target_meter.val) + 1e-10)
-        print('Evaluating {0}/{1} on image {2}, accuracy {3:.4f}.'.format(i + 1, len(gt_images), gt_images[i], accuracy))
+        print('Evaluating {0}/{1} on image {2}, accuracy {3:.4f}, precision {4:.4f}, recall {5:.4f}, f1 {6:.4f}, f2 {7:.4f}.'.format(i + 1, len(gt_images), gt_images[i], accuracy, precision, recall, f1, f2))
 
-    precision = metrics.precision_score(targets, preds, average='macro')
-    recall = metrics.recall_score(targets, preds, average='macro')
-    f1 = metrics.f1_score(targets, preds, average='macro')
-    f2 = (1 + 4) * precision * recall / (4 * precision + recall)
+    
     
     iou_class = intersection_meter.sum / (union_meter.sum + 1e-10)
     accuracy_class = intersection_meter.sum / (target_meter.sum + 1e-10)
     mIoU = np.mean(iou_class)
     mAcc = np.mean(accuracy_class)
     allAcc = sum(intersection_meter.sum) / (sum(target_meter.sum) + 1e-10)
+    precision = precision_meter.sum / (len(gt_images) + 1e-10)
+    recall = recall_meter.sum / (len(gt_images) + 1e-10)
+    f1 = f1_meter.sum / (len(gt_images) + 1e-10)
+    f2 = f2_meter.sum / (len(gt_images) + 1e-10)
+
 
     print('Eval result: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}.'.format(mIoU, mAcc, allAcc))
     for i in range(classes):
         print('Class_{} result: iou/accuracy {:.4f}/{:.4f}.'.format(i, iou_class[i], accuracy_class[i]))
     print('Eval result: precision/recall/f1/f2 {:.4f}/{:.4f}/{:.4f}/{:.4f}.'.format(precision, recall, f1, f2))
 
-annotations = json.load(open('/data0/zzhang/new_polyp_annotation_01_03/test.json'))
+
 gt_root = './test_anno/'
 #pred_root = '/data0/zzhang/tmp/pranet/'
 pred_root = '/data0/zzhang/tmp/cleaned_data/'

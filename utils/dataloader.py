@@ -4,6 +4,7 @@ import torch.utils.data as data
 import torchvision.transforms as transforms
 import glob
 import json
+from pycocotools.coco import COCO
 
 class PolypDataset(data.Dataset):
     """
@@ -11,15 +12,16 @@ class PolypDataset(data.Dataset):
     """
     def __init__(self, image_root, gt_root, json_file, trainsize):
         self.trainsize = trainsize
-        annotations = json.load(open(json_file))
+
         self.images = []
         self.gts = []
-        for i in range(len(annotations["images"])):
-            name = annotations["images"][i]["file_name"]
-            self.images.append(image_root + name)
-            self.gts.append(gt_root + name)
-        self.images = sorted(self.images)
-        self.gts = sorted(self.gts)
+        coco = COCO(json_file)
+        img_ids = coco.getImgIds()
+        for i in img_ids:
+            info = coco.loadImgs([i])[0]
+            self.images.append(image_root + info['file_name'])
+            self.gts.append(gt_root + info['file_name'])
+
         self.filter_files()
         self.size = len(self.images)
         self.img_transform = transforms.Compose([
@@ -95,11 +97,15 @@ class test_dataset:
         self.images = []
         self.gts = []
         self.names = []
-        for i in range(len(annotations["images"])):
-            name = annotations["images"][i]["file_name"]
-            self.images.append(image_root + name)
-            self.gts.append(gt_root + name)
-            self.names.append(name)
+        self.images = []
+        self.gts = []
+        coco = COCO(json_file)
+        img_ids = coco.getImgIds()
+        for i in img_ids:
+            info = coco.loadImgs([i])[0]
+            self.images.append(image_root + info['file_name'])
+            self.gts.append(gt_root + info['file_name'])
+            self.names.append(info['file_name'])
 
         self.transform = transforms.Compose([
             transforms.Resize((self.testsize, self.testsize)),
