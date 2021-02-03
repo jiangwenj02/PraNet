@@ -5,6 +5,7 @@ import torchvision.transforms as transforms
 import glob
 import json
 from pycocotools.coco import COCO
+import numpy as np
 
 class PolypDataset(data.Dataset):
     """
@@ -37,7 +38,7 @@ class PolypDataset(data.Dataset):
         image = self.rgb_loader(self.images[index])
         gt = self.binary_loader(self.gts[index])
         image = self.img_transform(image)
-        print(1, gt.sum())
+        print(1, np.array(gt).sum())
         gt = self.gt_transform(gt)
         print(2, gt.sum())
         return image, gt
