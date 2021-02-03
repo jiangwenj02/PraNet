@@ -33,8 +33,6 @@ def train(train_loader, model, optimizer, epoch):
             images, gts = pack
             images = Variable(images).cuda()
             gts = Variable(gts).cuda()
-            import pdb
-            pdb.set_trace()
             # ---- rescale ----
             trainsize = int(round(opt.trainsize*rate/32)*32)
             if rate != 1:
