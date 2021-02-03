@@ -38,7 +38,7 @@ def train(train_loader, model, optimizer, epoch):
             trainsize = int(round(opt.trainsize*rate/32)*32)
             if rate != 1:
                 images = F.upsample(images, size=(trainsize, trainsize), mode='bilinear', align_corners=True)
-                gts = F.upsample(gts, size=(trainsize, trainsize), mode='nearest', align_corners=True)
+                gts = F.upsample(gts, size=(trainsize, trainsize), mode='nearest', align_corners=False)
             # ---- forward ----
             lateral_map_5, lateral_map_4, lateral_map_3, lateral_map_2 = model(images)
             # ---- loss function ----
