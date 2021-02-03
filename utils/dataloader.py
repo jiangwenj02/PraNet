@@ -40,6 +40,7 @@ class PolypDataset(data.Dataset):
         image = self.img_transform(image)
         #print(1, np.array(gt).sum(), np.array(gt).shape)
         gt = np.array(gt) * 255
+        gt = Image.fromarray(gt.astype('uint8')).convert('L')
         gt = self.gt_transform(gt)
         #print(2, gt.sum(), gt.shape)
         return image, gt
