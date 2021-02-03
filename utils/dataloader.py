@@ -31,7 +31,7 @@ class PolypDataset(data.Dataset):
             transforms.Normalize([0.485, 0.456, 0.406],
                                  [0.229, 0.224, 0.225])])
         self.gt_transform = transforms.Compose([
-            #transforms.Resize((self.trainsize, self.trainsize), interpolation=Image.NEAREST),
+            transforms.Resize((self.trainsize, self.trainsize), interpolation=Image.NEAREST),
             transforms.ToTensor()])
 
     def __getitem__(self, index):
@@ -39,6 +39,8 @@ class PolypDataset(data.Dataset):
         gt = self.binary_loader(self.gts[index])
         image = self.img_transform(image)
         print(1, np.array(gt).sum(), np.array(gt).shape)
+        gt = np.array(gt) * 255
+        gt = Image.fromarray(gt.astype('uint8')).convert('L')
         gt = self.gt_transform(gt)
         print(2, gt.sum(), gt.shape)
         return image, gt
