@@ -37,7 +37,9 @@ class PolypDataset(data.Dataset):
         image = self.rgb_loader(self.images[index])
         gt = self.binary_loader(self.gts[index])
         image = self.img_transform(image)
+        print(1, gt.sum())
         gt = self.gt_transform(gt)
+        print(2, gt.sum())
         return image, gt
 
     def filter_files(self):
