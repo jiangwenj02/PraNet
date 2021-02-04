@@ -45,7 +45,7 @@ for _data_name in ['CVC-300']:
 
         res = F.upsample(res, size=gt.shape, mode='bilinear', align_corners=False)
         res = res.sigmoid().data.cpu().numpy().squeeze() 
-        res = (res - res.min()) / (res.max() - res.min() + 1e-8)
+        #res = (res - res.min()) / (res.max() - res.min() + 1e-8)
         res = res >= 0.5
         res = res.astype(np.uint8)
         file_path = save_path+name
